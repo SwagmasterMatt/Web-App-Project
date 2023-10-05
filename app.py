@@ -1,11 +1,13 @@
 from flask import Flask, jsonify, request, render_template
 import sqlite3 as sqlite
+from flask_cors import CORS
 
 engine = sqlite.connect('radar.db')
 
 session = engine
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route('/')
 def index():
