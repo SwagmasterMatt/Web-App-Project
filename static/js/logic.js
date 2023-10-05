@@ -1,3 +1,27 @@
+// Function to fetch data from the Flask endpoint
+async function fetchData() {
+    // Make a GET request to your Flask app
+    const response = await fetch('http://127.0.0.1:5500/places');
+
+    // Parse the JSON data from the response
+    const shop_data = await response.json();
+
+    // Update the DOM with the received data
+    document.getElementById('data-shops').innerText = JSON.stringify(shop_data);
+}
+
+// Function to fetch data from the Flask endpoint
+async function fetchData() {
+    // Make a GET request to your Flask app
+    const response = await fetch('http://127.0.0.1:5500/restaurants');
+
+    // Parse the JSON data from the response
+    const food_data = await response.json();
+
+    // Update the DOM with the received data
+    document.getElementById('data-food').innerText = JSON.stringify(food_data);
+}
+
 // Initialize map
 const map_shops = L.map('map-shops').setView([38.19864, -85.68989], 12);  // Louisville, KY
 const map_food = L.map('map-food').setView([38.19864, -85.68989], 12);  // Louisville, KY

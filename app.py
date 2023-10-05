@@ -13,7 +13,7 @@ CORS(app)
 def index():
     return render_template('index.html')
 
-@app.route('/places')
+@app.route('/places', methods=['GET'])
 def get_places():
     con = sqlite.connect('radar.db')
     cursor = con.cursor()
@@ -41,7 +41,7 @@ def get_places():
         }})
     return jsonify(places_data)
 
-@app.route('/restaurants')
+@app.route('/restaurants', methods=['GET'])
 def get_restaurants():
     con = sqlite.connect('radar.db')
     cursor = con.cursor()
