@@ -1,4 +1,4 @@
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, render_template
 import sqlite3 as sqlite
 
 engine = sqlite.connect('radar.db')
@@ -6,6 +6,10 @@ engine = sqlite.connect('radar.db')
 session = engine
 
 app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
 
 @app.route('/places')
 def get_places():
