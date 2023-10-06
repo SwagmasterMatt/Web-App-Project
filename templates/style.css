@@ -1,0 +1,17 @@
+/* defining the variable for the base greey color */
+body {
+    background-color: #847e7e9f;
+}
+
+/* Apply the base color to the background of the page */
+body {
+    background-color: #847e7e9f;
+}
+
+/* legend styling */
+.legend {
+    background-color: #847e7e9f;
+    padding: 10px;
+    border-radius: 10px;
+    line-height: 18px;
+} 
