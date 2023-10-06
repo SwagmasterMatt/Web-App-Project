@@ -63,14 +63,13 @@ class HexbinLayer extends L.Layer {
     onAdd(map) {
         this._map = map;
         this._container = this._initContainer();
-        map.on('moveend zoomend', this.redraw, this);
-        this.redraw();
+        map.on('moveend zoomend load', this.redraw, this);
         console.log('Hexbin Layer Added');
     }
 
     onRemove(map) {
         this._destroyContainer();
-        map.off('moveend zoomend', this.redraw, this);
+        map.off('moveend zoomend load', this.redraw, this);
         this._container = null;
         this._map = null;
         this._data = null;
@@ -78,6 +77,7 @@ class HexbinLayer extends L.Layer {
 
     addTo(map) {
         map.addLayer(this);
+		this.redraw();
         return this;
     }
 
