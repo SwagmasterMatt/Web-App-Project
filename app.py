@@ -69,6 +69,79 @@ def get_restaurants():
         }})
     return jsonify(restaurants_data)
 
+@app.route('/places_cat', methods=['GET'])
+def get_places_cat():
+    con = sqlite.connect('database/radar.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM places_cat")
+    data = cursor.fetchall()
+    con.close()
+    places_cat_data = []
+    for p_cat_0, p_cat_1, p_cat_2, p_cat_3 in data:
+        places_cat_data.append({
+            'places_cat': {
+            'p_cat_0': p_cat_0,
+            'p_cat_1': p_cat_1,
+            'p_cat_2': p_cat_2,
+            'p_cat_3': p_cat_3
+        }})
+    return jsonify(places_cat_data)
+
+@app.route('/restaurants_cat', methods=['GET'])
+def get_restaurants_cat():
+    con = sqlite.connect('database/radar.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM restaurants_cat")
+    data = cursor.fetchall()
+    con.close()
+    restaurants_cat_data = []
+    for r_cat_0, r_cat_1, r_cat_2, r_cat_3 in data:
+        restaurants_cat_data.append({
+            'Restaurants_cat': {
+            'r_cat_0': r_cat_0,
+            'r_cat_1': r_cat_1,
+            'r_cat_2': r_cat_2,
+            'r_cat_3': r_cat_3
+        }})
+    return jsonify(restaurants_cat_data)
+
+
+@app.route('/unique_places_cat', methods=['GET'])
+def get_unique_places_cat():
+    con = sqlite.connect('database/radar.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM unique_places_cat")
+    data = cursor.fetchall()
+    con.close()
+    unique_places_cat_data = []
+    for p_cat_0, p_cat_1, p_cat_2, p_cat_3 in data:
+        unique_places_cat_data.append({
+            'unique_places_cat': {
+            'p_cat_0': p_cat_0,
+            'p_cat_1': p_cat_1,
+            'p_cat_2': p_cat_2,
+            'p_cat_3': p_cat_3
+        }})
+    return jsonify(unique_places_cat_data)
+
+@app.route('/unique_restaurants_cat', methods=['GET'])
+def get_unique_restaurants_cat():
+    con = sqlite.connect('database/radar.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM unique_restaurants_cat")
+    data = cursor.fetchall()
+    con.close()
+    unique_restaurants_cat_data = []
+    for r_cat_0, r_cat_1, r_cat_2, r_cat_3 in data:
+        unique_restaurants_cat_data.append({
+            'unique_restaurants_cat': {
+            'r_cat_0': r_cat_0,
+            'r_cat_1': r_cat_1,
+            'r_cat_2': r_cat_2,
+            'r_cat_3': r_cat_3
+        }})
+    return jsonify(unique_restaurants_cat_data)
+     
 
 if __name__ == '__main__':
        app.run(port=5500, debug=True)
