@@ -1,17 +1,48 @@
-/* defining the variable for the base greey color */
-body {
+html,
+/* creating a title banner */
+.title {
     background-color: #847e7e9f;
+    height: 250px;
+    width: 970px;
+    border: solid;
+    border-color: #0c0b0b10;
+    border-width: 10px;
+    border-radius: 4rem;
+    margin: auto;
+    text-align: center;
+}
+
+
+/* defining the variable for the base green color */
+:root {
+    --base-grey: #847e7e9f;
 }
 
 /* Apply the base color to the background of the page */
 body {
-    background-color: #847e7e9f;
+    background-color: var(--base-grey);
 }
 
 /* legend styling */
 .legend {
-    background-color: #847e7e9f;
+    background-color: var(--base-grey);
     padding: 10px;
     border-radius: 10px;
     line-height: 18px;
 } 
+
+.legend .first {
+    color: #ec0e0ef0;
+}
+
+.legend .second {
+    color: #f3e97ae2;
+}
+
+.legend .thrid {
+    color: #11e997ec;
+}
+
+.legend .fourth {
+    color: #4036cedf;
+}
