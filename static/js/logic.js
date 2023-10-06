@@ -1,17 +1,18 @@
 // Function to fetch data from the Flask endpoint
-async function fetchData() {
+async function fetchshopData() {
     // Make a GET request to your Flask app
     const response = await fetch('http://127.0.0.1:5500/places');
 
     // Parse the JSON data from the response
-    const shop_data = await response.json();
+    const shop_data = await response.text();
+    console.log("server response: ", shop_data);
 
     // Update the DOM with the received data
     document.getElementById('data-shops').innerText = JSON.stringify(shop_data);
 }
 
 // Function to fetch data from the Flask endpoint
-async function fetchData() {
+async function fetchfoodData() {
     // Make a GET request to your Flask app
     const response = await fetch('http://127.0.0.1:5500/restaurants');
 
@@ -21,6 +22,7 @@ async function fetchData() {
     // Update the DOM with the received data
     document.getElementById('data-food').innerText = JSON.stringify(food_data);
 }
+console.log(fetchshopData());
 
 // Initialize map
 const map_shops = L.map('map-shops').setView([38.19864, -85.68989], 12);  // Louisville, KY

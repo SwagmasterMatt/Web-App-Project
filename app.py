@@ -15,7 +15,7 @@ def index():
 
 @app.route('/places', methods=['GET'])
 def get_places():
-    con = sqlite.connect('radar.db')
+    con = sqlite.connect('database/radar.db')
     cursor = con.cursor()
     cursor.execute("SELECT * FROM places")
     data = cursor.fetchall()
@@ -43,7 +43,7 @@ def get_places():
 
 @app.route('/restaurants', methods=['GET'])
 def get_restaurants():
-    con = sqlite.connect('radar.db')
+    con = sqlite.connect('database/radar.db')
     cursor = con.cursor()
     cursor.execute("SELECT * FROM restaurants")
     data = cursor.fetchall()
