@@ -41,6 +41,7 @@ class HexbinLayer extends L.Layer {
     }
 
 	setData(data) {
+		console.log('Setting Hexbin Data');
 		this._data = data;
 		this.redraw();
 	}
@@ -76,12 +77,14 @@ class HexbinLayer extends L.Layer {
     }
 
     addTo(map) {
+		console.log('Adding Hexbin Layer to Map');
         map.addLayer(this);
 		this.redraw();
         return this;
     }
 
     _initContainer() {
+		console.log('Initializing Hexbin Container');
         const paneId = 'hexbinPane';
         this._map.createPane(paneId);
 
@@ -93,13 +96,15 @@ class HexbinLayer extends L.Layer {
     }
   
     _destroyContainer() {
+		console.log('Destroying Hexbin Container');
         if (this._container) {
             this._container.remove();
         }
     }
 
-	// New method for highlighting clicked hexagons
+	// Method for highlighting clicked hexagons
     highlightClickedHexagon(bin) {
+		console.log('Highlighting Clicked Hexagon');
 
 
         // Remove any previously highlighted hexagon
@@ -126,6 +131,7 @@ class HexbinLayer extends L.Layer {
   
     // Method to calculate the vertices of a hexagon
     calculateHexagonVertices(latlng, radius) {
+		console.log('Calculating Hexagon Vertices for Highlighting');
         const angles = [30, 90, 150, 210, 270, 330, 30];
         return angles.map(angle => {
             const dx = radius * Math.cos(angle * Math.PI / 180);
@@ -134,11 +140,12 @@ class HexbinLayer extends L.Layer {
             return this._map.layerPointToLatLng(point);
         });
     }
+			
 
 
     // Redraw function
     redraw = () => {
-        //console.log('Redrawing Hexbins');
+        console.log('Redrawing Hexbins');
         if (!this._map) return;
 
         const { lng, lat, radius } = this.options;
@@ -189,9 +196,11 @@ class HexbinLayer extends L.Layer {
         
         // Create or update hexagons
         this._createHexagons(join, data);
+		console.log('FN Redraw Complete');
     }
   
     _createHexagons = (g, data) => {
+		console.log('FN Create Hexagons Entered');
         const self = this; // Store a reference to the HexbinLayer instance
         const bins = this._hexLayout(data).map(bin => {
             const totalScore = d3.sum(bin, d => d.original.score);
@@ -228,8 +237,10 @@ class HexbinLayer extends L.Layer {
 		// Initialize a Leaflet LayerGroup to hold markers
 		if (this._markerLayer) {
 			this._markerLayer.clearLayers();
+			console.log('Marker Layer Cleared');
 		} else {
 			this._markerLayer = L.layerGroup().addTo(this._map);
+			console.log('Marker Layer Added');
 		}
 	
 		// Loop through each bin to add a marker at its center
@@ -268,6 +279,7 @@ class HexbinLayer extends L.Layer {
 	
 			// Add marker to the layer group
 			marker.addTo(this._markerLayer);
+			console.log('bind marker to layer group');
 		});
     }
   
@@ -278,7 +290,7 @@ class HexbinLayer extends L.Layer {
 		// Debugging line to print the map object
 		//console.log('Map object:', this._map);
 	
-		const point = this._map.latLngToLayerPoint([coord[1], coord[0]]);
+		const point = this._map.latLngToLayerPoint([coord[0], coord[1]]);
 	
 		// Debugging line to print the output point
 		//console.log('Projected point:', point);
@@ -289,8 +301,9 @@ class HexbinLayer extends L.Layer {
 		if (!data?.length) {
 		  return { min: [0, 0], max: [0, 0] };
 		}
+		console.log('bounds entered');
 	  
-		const bounds = [[999, 999], [-999, -999]];
+		const bounds = [[9999999, 9999999], [-999, -999]];
 	  
 		data.forEach(({ point: [x, y] }) => {
 		  bounds[0][0] = Math.min(bounds[0][0], x);
@@ -298,9 +311,15 @@ class HexbinLayer extends L.Layer {
 		  bounds[1][0] = Math.max(bounds[1][0], x);
 		  bounds[1][1] = Math.max(bounds[1][1], y);
 		});
+
+		const result = { min: bounds[0], max: bounds[1] };
+
+		console.log('bounds result:', result);
+		
 	  
-		return { min: bounds[0], max: bounds[1] };
+		return result
 	  }
+	  
 	  
 	  getBounds() {
 		const data = this._data.map(d => {
@@ -313,6 +332,7 @@ class HexbinLayer extends L.Layer {
 		  [bounds.min[0], bounds.min[1]],
 		  [bounds.max[0], bounds.max[1]]
 		];
+		
 	  }
 }
 
