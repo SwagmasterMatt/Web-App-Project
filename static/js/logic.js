@@ -162,6 +162,13 @@ function populateCategories(categories, checkboxClass, checkboxContainer) {
             }
         });
 
+        // Create an img element for the category image
+        const img = document.createElement('img');
+        img.src = `/static/ProjectImages/CleanedImages/${category}_no_bg.png`; // Assuming the category name is the image name
+        img.alt = `${category} image`;
+        img.width = 30;
+        img.height = 30;
+
 
         
         // Create a label for the checkbox
@@ -169,6 +176,7 @@ function populateCategories(categories, checkboxClass, checkboxContainer) {
         label.appendChild(document.createTextNode(' ' + category));
 
         // Append checkbox and label to the container
+        container.appendChild(img);
         container.appendChild(checkbox);
         container.appendChild(label);
 
@@ -180,44 +188,63 @@ function populateCategories(categories, checkboxClass, checkboxContainer) {
 
 // Function to populate sliders
 function populateSliders(categories, sliderContainer, dataArray) {
+    // Fetch the container element by its ID
     const container = document.getElementById(sliderContainer);
+    
+    // Clear out any existing content in the container
     container.innerHTML = '';
 
+    // Loop through each category
     categories.forEach(category => {
+        // Create a sub-container for each category
+        const subContainer = document.createElement('div');
+        subContainer.className = 'slider-sub-container';
+
+        // Create a new input element for the slider
         const slider = document.createElement("input");
         slider.type = "range";
         slider.min = "0";
         slider.max = "100";
-        // Set initial slider value based on dataArray
+
+        // Set the initial value of the slider based on dataArray
         let initialScore = dataArray.find(item => {
             return Object.keys(item)[0] === "places" ? 
                    item.places.cat_1 === category : 
                    item.restaurants.cat_1 === category;
         });
-        
+
+        // Set the initial value of the slider
         initialScore = initialScore ? initialScore.places ? initialScore.places.score : initialScore.restaurants.score : 50;
-        
         slider.value = initialScore;
         slider.className = "slider";
         slider.dataset.category = category;
 
-        
+        // Create an img element to represent the category
+        const img = document.createElement('img');
+        img.src = `/static/ProjectImages/CleanedImages/${category}_no_bg.png`;
+        img.alt = `${category} image`;
+        img.width = 30;
+        img.height = 30;
 
+        // Add event listener to update dataArray and map when the slider changes
         slider.addEventListener('input', function () {
             updateDataArrayScore(category, this.value, dataArray);
-            // update the map data
             updateHexbinData(dataArray, hexLayershops);
         });
 
-        // Append slider to the container
-        container.appendChild(slider);
+        // Append the slider and image to the sub-container
+        subContainer.appendChild(img);
+        subContainer.appendChild(slider);
+
+        // Append the sub-container to the main container
+        container.appendChild(subContainer);
 
         // Add a break line for better readability
         const br = document.createElement('br');
         container.appendChild(br);
     });
 
-    // Resize the slider box based on number of sliders
+    // Resize the slider box based on the number of sliders
     resizeSliderBox(sliderContainer);
 }
 
@@ -241,10 +268,12 @@ function toggleSliders(checkboxClass, sliderContainer, dataArray) {
                 const initVal = 50; // Set to any initial value
                 slider.value = initVal;
                 updateDataArrayScore(checkbox.dataset.category, initVal, dataArray);
+                resizeSliderBox(sliderContainer);
             } else {
                 slider.style.display = "none";
                 // Set score to null when unchecked
                 updateDataArrayScore(checkbox.dataset.category, null, dataArray);
+                resizeSliderBox(sliderContainer);
             }
         });
     });
@@ -336,7 +365,9 @@ async function initializeMaps() {
     hexLayershops.addTo(map_shops);
 }
 
-initializeMaps();
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMaps();
+});
 
 
 

@@ -2,8 +2,9 @@ class HexbinLayer extends L.Layer {
     constructor(options = {}) {
         super(options);
         L.setOptions(this, options);
-        // Fallback to d => d.length if value is not provided
-        this._value = this.options.value || (d => d.length);
+        // Use provided function to calculate score or fallback to calculating length
+        // If a custom function is not provided, default to counting the length of data points in each bin
+        this._value = this.options.calculateScore || ((d, metaData) => d.length);
 
         // Initialize hex layout with the given options
         this._hexLayout = d3.hexbin()
@@ -37,12 +38,25 @@ class HexbinLayer extends L.Layer {
 		// Initialize marker layer
 		this._markerLayer = null;
 		this._highlightHexagon = null;
-		
-    }
 
-	setData(data) {
+		// Initialize metaData and set to empty object if not provided
+		this._metaData = typeof this.options.metaData === 'function' ? this.options.metaData : (() => ({}));
+    }
+		
+    
+
+	setData(data, metaData) {
 		console.log('Setting Hexbin Data');
 		this._data = data;
+		
+		// Ensure metaData is a function
+		if (typeof metaData === 'function') {
+			this._metaData = metaData;
+		} else {
+			console.error('Provided metaData is not a function. Falling back to default function.');
+			this._metaData = () => (metaData || {});
+		}
+	
 		this.redraw();
 	}
 
@@ -198,6 +212,20 @@ class HexbinLayer extends L.Layer {
         this._createHexagons(join, data);
 		console.log('FN Redraw Complete');
     }
+
+	// Added a default function to process metadata
+	hexMarkermetadata(binMetaData) {
+		// Default function that joins all metadata as strings
+		// You can override this function on the user side to customize the popup content
+		return Object.values(binMetaData).join(', ');
+	}
+
+	// New method to process metadata for marker
+	processMetaData(binMetaData) {
+		return this.hexMarkermetadata(binMetaData);  // Calls the hexMarkermetadata method
+	}
+	
+
   
     _createHexagons = (g, data) => {
 		console.log('FN Create Hexagons Entered');
@@ -206,6 +234,7 @@ class HexbinLayer extends L.Layer {
             const totalScore = d3.sum(bin, d => d.original.score);
             const avgScore = bin.length ? totalScore / bin.length : 0;
             bin.score = avgScore;
+			bin.metaData = this._metaData(bin);
             return bin;
 			
         });
@@ -260,7 +289,7 @@ class HexbinLayer extends L.Layer {
 			});
 	
 			// Add a popup to the marker
-			marker.bindPopup(`Average Score: ${bin.score}`);
+			marker.bindPopup(`Average Score: ${bin.score}<br>${this.processMetaData(bin.metaData)}`);
 	
 			// Add hover event
 			marker.on('mouseover', () => {
@@ -281,6 +310,7 @@ class HexbinLayer extends L.Layer {
 			marker.addTo(this._markerLayer);
 			console.log('bind marker to layer group');
 		});
+
     }
   
     _project(coord) {
@@ -332,8 +362,7 @@ class HexbinLayer extends L.Layer {
 		  [bounds.min[0], bounds.min[1]],
 		  [bounds.max[0], bounds.max[1]]
 		];
-		
-	  }
+	}
 }
 
 // Factory function for creating HexbinLayer
