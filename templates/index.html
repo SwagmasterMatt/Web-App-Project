@@ -26,55 +26,89 @@
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
   <style>
-    .map-wrapper {
-      position: relative;
+    .map-container {
+      display: flex;
+      flex-direction: row;
+      max-width: 2160px;
+      justify-content: flex-start;
+      align-items: flex-start;
+      margin-bottom: 20px;
+    }
+
+    .control-container {
+      flex: 1; /* This will flex in relation to .map-box */
+      display: flex;
+      flex-direction: column; /* stack vertically */
+      align-items: flex-start;
+      max-width: 500px; /* Adjust as needed */
+      margin-right: 20px; /* Spacing between this container and the map */
+    }
+
+    .checkbox-box {
+      width: 100%;
+      border: 1px solid #ccc;
+      padding: 10px;
+      box-shadow: 0 0 5px rgba(0,0,0,0.2);
+      margin-bottom: 20px; /* spacing between checkbox and slider */
     }
 
     .slider-box {
-      position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 1000;
-      background-color: white;
-      padding: 10px;
+      width: 100%;
       border: 1px solid #ccc;
+      padding: 10px;
       box-shadow: 0 0 5px rgba(0,0,0,0.2);
     }
 
-    .slider-item {
-      display: flex;
-      align-items: center;
+    .map-box {
+      flex: 4; /* This will take up remaining space */
+      max-width: 1560px; 
+      height: 800px; 
+      border: 1px solid #070707;
     }
 
-    .slider-item img {
-      width: 50px;
-      height: auto;
-      margin-right: 10px;
+    .slider-sub-container {
+      display: flex;
+      align-items: center;
+      margin-bottom: 5px;  /* Space between each sub-container */
+    }
+
+    .slider-sub-container img {
+      margin-right: 10px;  /* Space between image and slider */
+    }
+
+    #checkbox-box-shops, #checkbox-box-food, #slider-box-shops, #slider-box-food {
+      column-count: 3;
+      width: 100%;
     }
   </style>
 </head>
-
 <body>
-  <!-- Map and Sliders for Shops -->
-  <div class="map-wrapper">
-    <div id="map-shops" style="width: 1280px; height: 800px;"></div>
-    <div class="slider-box" id="slider-box-shops"></div>
-    <!-- Checkbox container for filtering shop categories -->
-    <div id="checkbox-box-shops"></div>
-    <!-- <button id="reload-shop-map">Reload Shop Map</button> -->
+  <!-- Container for Shops -->
+  <div class="map-container">
+    <!-- Control container -->
+    <div class="control-container">
+      <!-- Checkbox container for filtering shop categories -->
+      <div class="checkbox-box" id="checkbox-box-shops"></div>
+      <!-- Sliders for Shops -->
+      <div class="slider-box" id="slider-box-shops"></div>
+    </div>
+    <!-- Map for Shops -->
+    <div class="map-box" id="map-shops"></div>
   </div>
 
-  <!-- Map and Sliders for Food -->
-  <div class="map-wrapper">
-    <div id="map-food" style="width: 1280px; height: 800px;"></div>
-    <div class="slider-box" id="slider-box-food"></div>
-    <!-- Checkbox container for filtering food categories -->
-    <div id="checkbox-box-food"></div>
-    <!-- <button id="reload-food-map">Reload Food Map</button> -->
+  <!-- Container for Food -->
+  <div class="map-container">
+    <!-- Control container -->
+    <div class="control-container">
+      <!-- Checkbox container for filtering food categories -->
+      <div class="checkbox-box" id="checkbox-box-food"></div>
+      <!-- Sliders for Food -->
+      <div class="slider-box" id="slider-box-food"></div>
+    </div>
+    <!-- Map for Food -->
+    <div class="map-box" id="map-food"></div>
   </div>
 
-  <!-- Including the JavaScript file -->
-  
   <script type="text/javascript" src="../static/js/logic.js"></script>
 </body>
 </html>
