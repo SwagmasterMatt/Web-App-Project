@@ -40,7 +40,7 @@ class HexbinLayer extends L.Layer {
 		this._highlightHexagon = null;
 
 		// Initialize metaData and set to empty object if not provided
-		this._metaData = typeof this.options.metaData === 'function' ? this.options.metaData : (() => ({}));
+		this._metaData = [];
     }
 		
     
@@ -48,14 +48,7 @@ class HexbinLayer extends L.Layer {
 	setData(data, metaData) {
 		console.log('Setting Hexbin Data');
 		this._data = data;
-		
-		// Ensure metaData is a function
-		if (typeof metaData === 'function') {
-			this._metaData = metaData;
-		} else {
-			console.error('Provided metaData is not a function. Falling back to default function.');
-			this._metaData = () => (metaData || {});
-		}
+		this._metaData = metaData;
 	
 		this.redraw();
 	}
@@ -187,6 +180,27 @@ class HexbinLayer extends L.Layer {
 			};
 		}).filter(Boolean); // Remove undefined items, if any
 
+		const metaData = this._metaData.map(m => {
+			return {
+				meta: m,
+			};
+		}) //.filter(Boolean); // Remove undefined items, if any
+
+		//console.log('metaData:', metaData);
+
+		// join the data and metaData arrays
+
+		const joinedData = data.map((d, i) => {
+			return {
+				point: d.point,
+				original: d.original,
+				metaData: metaData[i].meta,
+			};
+		});
+		
+		//sort the joinedData array by score
+		//joinedData.sort((a, b) => (a.original.score > b.original.score) ? -1 : 1);
+
 		// Debug: Log the original data
 		//console.log('Original Data:', this._data);
 
@@ -209,15 +223,28 @@ class HexbinLayer extends L.Layer {
         join.exit().remove();
         
         // Create or update hexagons
-        this._createHexagons(join, data);
+        this._createHexagons(join, joinedData);
 		console.log('FN Redraw Complete');
     }
 
 	// Added a default function to process metadata
 	hexMarkermetadata(binMetaData) {
-		// Default function that joins all metadata as strings
-		// You can override this function on the user side to customize the popup content
-		return Object.values(binMetaData).join(', ');
+		function deepStringify(obj) {
+			if (obj === null) {
+				return 'null';
+			}
+			if (obj === undefined) {
+				return 'undefined';
+			}
+			if (typeof obj === 'object') {
+				return Object.entries(obj).map(([key, value]) => {
+					return `${deepStringify(value)}`;
+				}).join(' ');
+			}
+			return obj.toString();
+		}
+		// Invoke the deepStringify function
+		return deepStringify(binMetaData);
 	}
 
 	// New method to process metadata for marker
@@ -233,8 +260,9 @@ class HexbinLayer extends L.Layer {
         const bins = this._hexLayout(data).map(bin => {
             const totalScore = d3.sum(bin, d => d.original.score);
             const avgScore = bin.length ? totalScore / bin.length : 0;
+			const meta = bin.map(d => d.metaData);
             bin.score = avgScore;
-			bin.metaData = this._metaData(bin);
+			bin.metaData = meta;
             return bin;
 			
         });
@@ -289,7 +317,19 @@ class HexbinLayer extends L.Layer {
 			});
 	
 			// Add a popup to the marker
-			marker.bindPopup(`Average Score: ${bin.score}<br>${this.processMetaData(bin.metaData)}`);
+			marker.bindPopup(`<strong>Average Score:</strong> ${bin.score}<br><br>${this.processMetaData(bin.metaData)}`, {
+				autoPan: false
+			});
+
+			// Add an event listener for when the popup is opened
+			marker.on("popupopen", function(event) {
+				// Find the leaflet-popup-content within the popup and style it
+				var popupContent = event.popup.getElement().querySelector('.leaflet-popup-content');
+				if (popupContent) {
+					popupContent.style.maxHeight = '200px';
+					popupContent.style.overflowY = 'auto';
+				}
+			});
 	
 			// Add hover event
 			marker.on('mouseover', () => {
