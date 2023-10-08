@@ -1,102 +1,48 @@
-/* General styling to modernize the website */
-body {
-  font-family: Arial, sans-serif;
-  background-color: #F5F5F5;
-  margin: 0;
-  padding: 0;
-}
-
-h1,
-h2,
-h3,
-p {
-  margin-bottom: 20px;
-}
-
-/* Container to wrap the whole content */
-.container {
-  max-width: 1280px;
-  margin: auto;
-  padding: 20px;
-  background-color: #fff;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
-}
-
-/* Styling for the title */
-.title {
-  font-size: 36px;
+/* Banner styling */
+.banner {
+  background-color: #333;
+  color: #fff;
   text-align: center;
-  color: #333;
+  padding: 20px;
+  font-size: 36px;
 }
 
-/* Styling for the description */
+/* Description area styling */
 .description {
   font-size: 18px;
   text-align: center;
-  color: #666;
-}
-
-/* Styling for subtitles */
-.subtitle {
-  font-size: 24px;
-  color: #444;
-}
-
-/* Styling for the map wrappers */
-.map-wrapper {
-  position: relative;
+  padding: 20px;
+  background-color: #f9f9f9;
+  color: #333;
   margin: 20px 0;
 }
 
-/* Specific styling for map */
-#map-shops,
-#map-food {
-  width: 100%;
-  height: 800px;
-  background-color: #ccc;
+/* Tab styling */
+.tab {
+  overflow: hidden;
+  background-color: #333;
 }
 
-/* Styling for the slider boxes */
-.slider-box {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  z-index: 1000;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+/* Style the buttons inside the tab */
+.tab button {
+  background-color: inherit;
+  color: #fff;
+  padding: 14px 20px;
+  border: none;
+  cursor: pointer;
 }
 
-/* Styling for the checkbox containers */
-#checkbox-box-shops,
-#checkbox-box-food {
-  position: absolute;
-  top: 60px;
-  right: 10px;
-  z-index: 1000;
-  background-color: #f9f9f9;
-  padding: 10px;
-  border: 1px solid #ccc;
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+/* Change background color of buttons on hover */
+.tab button:hover {
+  background-color: #555;
 }
 
-/* Styling for each slider item */
-.slider-item {
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
+/* Create an active/current tablink class */
+.tab button.active {
+  background-color: #555;
 }
 
-/* Styling for the images inside the slider-item */
-.slider-item img {
-  width: 50px;
-  height: auto;
-  margin-right: 10px;
-}
-
-/*New code recently added*/
- .map-container {
+.map-container {
   display: flex;
   flex-direction: row;
   max-width: 2160px;
@@ -106,40 +52,55 @@ p {
 }
 
 .control-container {
-  flex: 1;
+  flex: 1; /* This will flex in relation to .map-box */
   display: flex;
-  flex-direction: column;
+  flex-direction: column; /* stack vertically */
   align-items: flex-start;
-  max-width: 500px;
-  margin-right: 20px;
+  max-width: 500px; /* Adjust as needed */
+  margin-right: 20px; /* Spacing between this container and the map */
 }
 
 .checkbox-box {
   width: 100%;
   border: 1px solid #ccc;
   padding: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
-  margin-bottom: 20px;
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
+  margin-bottom: 20px; /* spacing between checkbox and slider */
 }
 
 .slider-box {
   width: 100%;
   border: 1px solid #ccc;
   padding: 10px;
-  box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 0 5px rgba(0,0,0,0.2);
 }
 
 .map-box {
-  flex: 4;
-  max-width: 1560px;
-  height: 800px;
+  flex: 4; /* This will take up remaining space */
+  max-width: 1560px; 
+  height: 800px; 
   border: 1px solid #070707;
 }
 
-#checkbox-box-shops,
-#checkbox-box-food,
-#slider-box-shops,
-#slider-box-food {
+.slider-sub-container {
+  display: flex;
+  align-items: center;
+  margin-bottom: 5px;  /* Space between each sub-container */
+}
+
+.slider-sub-container img {
+  margin-right: 10px;  /* Space between image and slider */
+}
+
+#checkbox-box-shops, #checkbox-box-food, #slider-box-shops, #slider-box-food {
   column-count: 2;
   width: 100%;
+}
+
+/* Add margins, border styling, and other general enhancements */
+.container, .map-container, .control-container, .checkbox-box, .slider-box, .map-box {
+  margin: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
 }

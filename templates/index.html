@@ -1,9 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <title>Shopping Map</title>
-  
+
+
+
   <!-- D3 library -->
   <script src="https://d3js.org/d3.v7.min.js"></script>
   <script src="https://d3js.org/d3-hexbin.v0.2.min.js"></script>
@@ -12,77 +15,41 @@
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.15.1/moment.min.js"></script>
 
   <!-- Leaflet CSS -->
-  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" 
-  integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" 
-  crossorigin=""/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+    integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY=" crossorigin="" />
 
   <!-- Leaflet JavaScript code -->
-  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js" 
-  integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" 
-  crossorigin=""></script>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+    integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo=" crossorigin=""></script>
+
+  <!-- Our CSS -->
+  <!-- Link to the CSS file -->
+  <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
 
   <script src="../static/js/HexbinLayer.js"></script>
 
   <script src="https://cdn.polyfill.io/v2/polyfill.min.js"></script>
 
-  <style>
-    .map-container {
-      display: flex;
-      flex-direction: row;
-      max-width: 2160px;
-      justify-content: flex-start;
-      align-items: flex-start;
-      margin-bottom: 20px;
-    }
-
-    .control-container {
-      flex: 1; /* This will flex in relation to .map-box */
-      display: flex;
-      flex-direction: column; /* stack vertically */
-      align-items: flex-start;
-      max-width: 500px; /* Adjust as needed */
-      margin-right: 20px; /* Spacing between this container and the map */
-    }
-
-    .checkbox-box {
-      width: 100%;
-      border: 1px solid #ccc;
-      padding: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-      margin-bottom: 20px; /* spacing between checkbox and slider */
-    }
-
-    .slider-box {
-      width: 100%;
-      border: 1px solid #ccc;
-      padding: 10px;
-      box-shadow: 0 0 5px rgba(0,0,0,0.2);
-    }
-
-    .map-box {
-      flex: 4; /* This will take up remaining space */
-      max-width: 1560px; 
-      height: 800px; 
-      border: 1px solid #070707;
-    }
-
-    .slider-sub-container {
-      display: flex;
-      align-items: center;
-      margin-bottom: 5px;  /* Space between each sub-container */
-    }
-
-    .slider-sub-container img {
-      margin-right: 10px;  /* Space between image and slider */
-    }
-
-    #checkbox-box-shops, #checkbox-box-food, #slider-box-shops, #slider-box-food {
-      column-count: 3;
-      width: 100%;
-    }
-  </style>
 </head>
+
 <body>
+  <!-- Banner with Editable Text -->
+  <div class="banner">
+    <h1>Edit this Banner Text</h1>
+  </div>
+
+  <!-- Description Area -->
+  <div class="description">
+    <p>Edit this description text. This uses a nice font.</p>
+  </div>
+
+  <!-- Tabs -->
+  <div class="tab">
+    <button class="tablinks active" onclick="switchTab('Shops')">Shops</button>
+    <button class="tablinks" onclick="switchTab('Food')">Food</button>
+  </div>
+
+  <div id="Shops" class="tabcontent" style="display: block;"></div>
   <!-- Container for Shops -->
   <div class="map-container">
     <!-- Control container -->
@@ -95,20 +62,55 @@
     <!-- Map for Shops -->
     <div class="map-box" id="map-shops"></div>
   </div>
-
-  <!-- Container for Food -->
-  <div class="map-container">
-    <!-- Control container -->
-    <div class="control-container">
-      <!-- Checkbox container for filtering food categories -->
-      <div class="checkbox-box" id="checkbox-box-food"></div>
-      <!-- Sliders for Food -->
-      <div class="slider-box" id="slider-box-food"></div>
-    </div>
-    <!-- Map for Food -->
-    <div class="map-box" id="map-food"></div>
   </div>
 
+  <div id="Food" class="tabcontent" style="display: none;">
+    <!-- Container for Food -->
+    <div class="map-container">
+      <!-- Control container -->
+      <div class="control-container">
+        <!-- Checkbox container for filtering food categories -->
+        <div class="checkbox-box" id="checkbox-box-food"></div>
+        <!-- Sliders for Food -->
+        <div class="slider-box" id="slider-box-food"></div>
+      </div>
+      <!-- Map for Food -->
+      <div class="map-box" id="map-food"></div>
+    </div>
+  </div>
+
+  <script>
+    function switchTab(tabName) {
+      var i, tabcontent, tablinks;
+      tabcontent = document.getElementsByClassName("tabcontent");
+      for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+      }
+      tablinks = document.getElementsByClassName("tablinks");
+      for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+      }
+      document.getElementById(tabName).style.display = "block";
+      event.currentTarget.className += " active";
+    }
+  </script>
   <script type="text/javascript" src="../static/js/logic.js"></script>
 </body>
+
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
