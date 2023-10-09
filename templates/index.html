@@ -35,6 +35,7 @@
 <body>
   <!-- Banner with Editable Text -->
   <div class="banner">
+    <img src="static/ProjectImages/louisville.jpg" alt="Banner Image">
     <h1>Edit this Banner Text</h1>
   </div>
 
@@ -49,23 +50,23 @@
     <button class="tablinks" onclick="switchTab('Food')">Food</button>
   </div>
 
-  <div id="Shops" class="tabcontent" style="display: block;"></div>
-  <!-- Container for Shops -->
-  <div class="map-container">
-    <!-- Control container -->
-    <div class="control-container">
-      <!-- Checkbox container for filtering shop categories -->
-      <div class="checkbox-box" id="checkbox-box-shops"></div>
-      <!-- Sliders for Shops -->
-      <div class="slider-box" id="slider-box-shops"></div>
+  <!-- Tab Content for Shops -->
+  <div id="Shops" class="tabcontent" style="display: block;">
+    <div class="map-container">
+      <!-- Control container -->
+      <div class="control-container">
+        <!-- Checkbox container for filtering shop categories -->
+        <div class="checkbox-box" id="checkbox-box-shops"></div>
+        <!-- Sliders for Shops -->
+        <div class="slider-box" id="slider-box-shops"></div>
+      </div>
+      <!-- Map for Shops -->
+      <div class="map-box" id="map-shops"></div>
     </div>
-    <!-- Map for Shops -->
-    <div class="map-box" id="map-shops"></div>
-  </div>
   </div>
 
-  <div id="Food" class="tabcontent" style="display: none;">
-    <!-- Container for Food -->
+  <!-- Tab Content for Food -->
+  <div id="Food" class="tabcontent" style="display: block;">
     <div class="map-container">
       <!-- Control container -->
       <div class="control-container">
@@ -79,17 +80,26 @@
     </div>
   </div>
 
+  <!-- JavaScript to switch tabs -->
   <script>
+    // Function to switch tabs
     function switchTab(tabName) {
+      // Local variables to hold tab content and tab links
       var i, tabcontent, tablinks;
+
+      // Get all elements with class="tabcontent" and hide them
       tabcontent = document.getElementsByClassName("tabcontent");
       for (i = 0; i < tabcontent.length; i++) {
         tabcontent[i].style.display = "none";
       }
+
+      // Get all elements with class="tablinks" and remove the "active" class
       tablinks = document.getElementsByClassName("tablinks");
       for (i = 0; i < tablinks.length; i++) {
         tablinks[i].className = tablinks[i].className.replace(" active", "");
       }
+
+      // Show the current tab and add an "active" class to the button that opened the tab
       document.getElementById(tabName).style.display = "block";
       event.currentTarget.className += " active";
     }

@@ -7,13 +7,17 @@ const map_shops = L.map('map-shops').setView([38.19864, -85.68989], 12);
 const map_food = L.map('map-food').setView([38.19864, -85.68989], 12);
 
 // Add base layer to shop map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
+L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png', {
+    attribution: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+    subdomains: 'abcd',
+    maxZoom: 19
 }).addTo(map_shops);
 
 // Add base layer to food map
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '© OpenStreetMap contributors'
+L.tileLayer('https://stamen-tiles-{s}.a.ssl.fastly.net/toner/{z}/{x}/{y}{r}.png', {
+    attribution: 'Map tiles by Stamen Design, under CC BY 3.0. Data by OpenStreetMap, under ODbL.',
+    subdomains: 'abcd',
+    maxZoom: 19
 }).addTo(map_food);
 
 // Function to fetch shop data
@@ -174,6 +178,8 @@ function populateCategories(categories, checkboxClass, checkboxContainer) {
     selectAllButton.textContent = 'Select All';
     selectAllButton.addEventListener('click', () => toggleAllCheckboxes());
     container.appendChild(selectAllButton);
+    const br = document.createElement('br');
+    container.appendChild(br);
  
 
     // Create new checkboxes based on categories
@@ -262,7 +268,12 @@ function populateSliders(categories, sliderContainer, dataArray) {
         // Add event listener to update dataArray and map when the slider changes
         slider.addEventListener('input', function () {
             updateDataArrayScore(category, this.value, dataArray);
-            updateHexbinData(dataArray, hexLayershops);
+            if (sliderContainer.includes('shop')) {
+                updateHexbinData(dataArray, hexLayershops);
+            }
+            else {
+                updateHexbinData(dataArray, hexLayerfood);
+            }
         });
 
         // Append the slider and image to the sub-container
@@ -375,7 +386,7 @@ function updateHexbinData(dataArray, hexLayer) {
         const keys = Object.keys(item)[0];
         let result = {};
         
-        if (keys === "places" || keys === "restaurants") {
+        if (keys === "places") {
             let data = item[keys];
             
             // Bold the 'Name' and start div for indented categories
@@ -409,6 +420,39 @@ function updateHexbinData(dataArray, hexLayer) {
             result.categories = categories;
         }
         
+        if (keys === "restaurants") {
+            let data = item[keys];
+            
+            // Bold the 'Name' and start div for indented categories
+            result.name = `<strong>Name:</strong> ${data.name}<div style='margin-left: 20px;'>`;
+            
+            // Initialize an empty string to hold the categories
+            let categories = '';
+            
+            // Conditionally include and bold categories if they are not null
+            if (data.cat_1 !== null) {
+                categories += `<strong>Category 1:</strong> ${data.cat_1} <br>`;
+            }
+            
+            if (data.cat_2 !== null) {
+                categories += `<strong>Category 2:</strong> ${data.cat_2} <br>`;
+            }
+            
+            if (data.cat_3 !== null) {
+                categories += `<strong>Category 3:</strong> ${data.cat_3}`;
+            }
+            
+            // Add closing div for indented categories
+            if (categories) {
+                categories += '</div><br>';
+            } else {
+                // If there are no categories, close the div immediately
+                result.name += '</div><br>';
+            }
+            
+            // Combine name and categories
+            result.categories = categories;
+        }
         return result;
     });
 
@@ -454,5 +498,9 @@ document.addEventListener('DOMContentLoaded', () => {
     initializeMaps();
 });
 
+// Initialize map for shops tab
+function initShopsMap() {
+    var map_shops = L.map('shops-map').setView([38.19864, -85.68989], 12);        
+    }
 
 
