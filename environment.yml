@@ -6,8 +6,10 @@ dependencies:
   - aiofiles=22.1.0=py310haa95532_0
   - aiosqlite=0.18.0=py310haa95532_0
   - alabaster=0.7.12=pyhd3eb1b0_0
+  - anaconda-anon-usage=0.4.2=py310hfc23b7f_2
   - anaconda-client=1.11.2=py310haa95532_0
-  - anaconda-navigator=2.4.2=py310haa95532_0
+  - anaconda-cloud-auth=0.1.3=py310haa95532_0
+  - anaconda-navigator=2.5.0=py310haa95532_0
   - anaconda-project=0.11.1=py310haa95532_0
   - anyio=3.5.0=py310haa95532_0
   - appdirs=1.4.4=pyhd3eb1b0_0
@@ -56,12 +58,13 @@ dependencies:
   - colorama=0.4.6=py310haa95532_0
   - colorcet=3.0.1=py310haa95532_0
   - comm=0.1.2=py310haa95532_0
-  - conda=23.7.3=py310haa95532_0
-  - conda-build=3.24.0=py310haa95532_0
+  - conda=23.9.0=py310haa95532_0
+  - conda-build=3.27.0=py310haa95532_0
   - conda-content-trust=0.1.3=py310haa95532_0
+  - conda-index=0.3.0=py310haa95532_0
   - conda-pack=0.6.0=pyhd3eb1b0_0
-  - conda-package-handling=2.0.2=py310haa95532_0
-  - conda-package-streaming=0.7.0=py310haa95532_0
+  - conda-package-handling=2.2.0=py310haa95532_0
+  - conda-package-streaming=0.9.0=py310haa95532_0
   - conda-repo-cli=1.0.41=py310haa95532_0
   - conda-token=0.4.0=pyhd3eb1b0_0
   - conda-verify=3.4.2=py_1
@@ -271,6 +274,7 @@ dependencies:
   - pickleshare=0.7.5=pyhd3eb1b0_1003
   - pillow=9.4.0=py310hd77b12b_0
   - pip=23.1.2=py310haa95532_0
+  - pkce=1.0.3=py310haa95532_0
   - pkginfo=1.9.6=py310haa95532_0
   - platformdirs=3.10.0=py310haa95532_0
   - plotly=5.9.0=py310haa95532_0
@@ -296,6 +300,7 @@ dependencies:
   - pycparser=2.21=pyhd3eb1b0_0
   - pyct=0.5.0=py310haa95532_0
   - pycurl=7.45.2=py310hcd4344a_0
+  - pydantic=1.10.12=py310h2bbff1b_1
   - pydispatcher=2.0.5=py310haa95532_2
   - pydocstyle=6.3.0=py310haa95532_0
   - pyerfa=2.0.0=py310h2bbff1b_0
@@ -320,6 +325,7 @@ dependencies:
   - pytest=7.1.2=py310haa95532_0
   - python=3.10.9=h966fe2a_1
   - python-dateutil=2.8.2=pyhd3eb1b0_0
+  - python-dotenv=0.21.0=py310haa95532_0
   - python-fastjsonschema=2.16.2=py310haa95532_0
   - python-json-logger=2.0.7=py310haa95532_0
   - python-libarchive-c=2.9=pyhd3eb1b0_1
@@ -414,6 +420,7 @@ dependencies:
   - tqdm=4.65.0=py310h9909e9c_0
   - traitlets=5.7.1=py310haa95532_0
   - transformers=4.24.0=py310haa95532_0
+  - truststore=0.8.0=py310haa95532_0
   - twisted=22.2.0=py310h2bbff1b_1
   - twisted-iocpsupport=1.0.2=py310h2bbff1b_0
   - typing-extensions=4.7.1=py310haa95532_0
