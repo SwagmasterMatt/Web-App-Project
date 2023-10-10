@@ -26,6 +26,8 @@ Simply open the index.html file in your browser.  You can then adjust the heatma
 ![Presentation 3 Powerpoint(4)](https://github.com/SwagmasterMatt/Web-App-Project/assets/135544540/d0d60061-017b-4fd8-b869-4d111be13476)
 ![Presentation 3 Powerpoint(5)](https://github.com/SwagmasterMatt/Web-App-Project/assets/135544540/671b509a-4f90-41f9-8451-48667c0affee)
 ![Presentation 3 Powerpoint(6)](https://github.com/SwagmasterMatt/Web-App-Project/assets/135544540/447bea0c-11f1-4d6f-afe6-02f0f1c106e8)
+![Presentation 3 Powerpoint(7)](https://github.com/SwagmasterMatt/Web-App-Project/assets/135544540/4c15c458-985c-42fe-82f6-80da8f43ac14)
+![Presentation 3 Powerpoint(8)](https://github.com/SwagmasterMatt/Web-App-Project/assets/135544540/b845ef3d-8258-4267-a008-1c051699efe3)
 
 
 
