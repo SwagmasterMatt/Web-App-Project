@@ -4,6 +4,7 @@
 <head>
   <meta charset="UTF-8">
   <title>Shopping Map</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital@1&family=Lato:wght@300&display=swap" rel="stylesheet">
 
 
 
@@ -36,18 +37,21 @@
   <!-- Banner with Editable Text -->
   <div class="banner">
     <img src="static/ProjectImages/louisville.jpg" alt="Banner Image">
-    <h1>Edit this Banner Text</h1>
+    <h1>Shopping Experience Pro </h1>
+    <h2><br>     - Find Your Perfect Shopping Retreat</h2>
+    <h3><br>               Louisville, KY</h3>
   </div>
 
   <!-- Description Area -->
   <div class="description">
-    <p>Edit this description text. This uses a nice font.</p>
+    <p>Welcome to our innovative shopping preference platform! Discover a personalized shopping experience like never before. With the power at your fingertips, tailor your shopping criteria to perfection and unveil the ideal shopping destinations meticulously curated just for you. Whether it's fashion, food, or anything in between, we empower you to find the perfect fit in your desired area. Elevate your shopping adventure with us and uncover the true essence of retail therapy.</p>
   </div>
 
   <!-- Tabs -->
   <div class="tab">
     <button class="tablinks active" onclick="switchTab('Shops')">Shops</button>
     <button class="tablinks" onclick="switchTab('Food')">Food</button>
+    <button class="tablinks" onclick="switchTab('Presentation')">Presentation</button>
   </div>
 
   <!-- Tab Content for Shops -->
@@ -79,6 +83,654 @@
       <div class="map-box" id="map-food"></div>
     </div>
   </div>
+
+
+<div id="Presentation" class="tabcontent">
+    <div class="slide-container">
+        <!-- Slides 1 to 6 -->
+        <img class="slide" src="static/ProjectImages/TitleSlide.png" alt="Slide 1">
+        <img class="slide" src="static/ProjectImages/OurGoal.png" alt="Slide 2">
+        <img class="slide" src="static/ProjectImages/Slide3.png" alt="Slide 3">
+        <img class="slide" src="static/ProjectImages/Slide4.png" alt="Slide 4">
+        <img class="slide" src="static/ProjectImages/Slide5.png" alt="Slide 5">
+        <img class="slide" src="static/ProjectImages/Slide6.png" alt="Slide 6">
+
+        <!-- Slide 7 with code box -->
+        <img class="slide" src="static/ProjectImages/Slide7.png" alt="Slide 7">
+        <textarea class="code-box">    
+        @app.route('/')
+        def index():
+            return render_template('index.html')
+        
+        @app.route('/places', methods=['GET'])
+        def get_places():
+            con = sqlite.connect('database/radar.db')
+            cursor = con.cursor()
+            cursor.execute("SELECT * FROM places")
+            data = cursor.fetchall()
+            con.close()
+            places_data = []
+            for id, name, type, slug, chain_name, domain, cat_0, cat_1, cat_2, cat_3, lat, long, score, reviews in data:
+                places_data.append({
+                    'places': {
+                    'id': id,
+                    'name': name,
+                    'type': type,
+                    'slug': slug,
+                    'chain_name': chain_name,
+                    'domain': domain,
+                    'cat_0': cat_0,
+                    'cat_1': cat_1,
+                    'cat_2': cat_2,
+                    'cat_3': cat_3,
+                    'lat': lat,
+                    'long': long,
+                    'score': score,
+                    'reviews': reviews
+                }})
+            return jsonify(places_data)            
+        </textarea>
+
+
+        <!-- Slide 8 with code box -->
+        <img class="slide" src="static/ProjectImages/Slide8.png" alt="Slide 8">
+        <textarea class="code-box">
+          class HexbinLayer extends L.Layer {
+            constructor(options = {}) {
+                super(options);
+                L.setOptions(this, options);
+                // Use provided function to calculate score or fallback to calculating length
+                // If a custom function is not provided, default to counting the length of data points in each bin
+                this._value = this.options.calculateScore || ((d, metaData) => d.length);
+        
+                // Initialize hex layout with the given options
+                this._hexLayout = d3.hexbin()
+                    .radius(this.options.radius)
+                    .x(d => d.point[0])
+                    .y(d => d.point[1]);
+                
+                this._data = [];
+        
+                // Calculate step size based on number of colors and max domain value
+                const maxDomainValue = 100;
+                const stepSize = maxDomainValue / (this.options.colorRange.length - 1);
+        
+                // Generate domain dynamically based on the number of colors
+                const domainArray = Array.from({ length: this.options.colorRange.length }, (_, i) => 1 + i * stepSize);
+        
+                // Initialize color scale
+                this._colorScale = d3.scaleLinear()
+                    .domain(domainArray)
+                    .range(this.options.colorRange)
+                    .clamp(true);
+        
+                // Initialize radius scale
+                this._radiusScale = d3.scaleSqrt()
+                    .range(this.options.radiusRange)
+                    .clamp(true);
+            this._eventCallbacks = {
+              hover: [],
+              click: []
+            };
+            // Initialize marker layer
+            this._markerLayer = null;
+            this._highlightHexagon = null;
+        
+            // Initialize metaData and set to empty object if not provided
+            this._metaData = [];
+            }
+            
+            
+        
+          setData(data, metaData) {
+            console.log('Setting Hexbin Data');
+            this._data = data;
+            this._metaData = metaData;
+          
+            this.redraw();
+          }
+        </textarea>
+        <textarea class="code-box">
+          redraw = () => {
+            console.log('Redrawing Hexbins');
+            if (!this._map) return;
+    
+            const { lng, lat, radius } = this.options;
+            const zoom = this._map.getZoom();
+            const padding = radius * 2;
+    
+    
+    
+            // Generate mapped data and get bounds
+            const data = this._data.map(d => {
+          // Debug: Log each longitude and latitude
+          //console.log('Longitude:', lng(d), 'Latitude:', lat(d));
+          
+          // Ensure that lng and lat are providing numeric values
+          if (isNaN(lng(d)) || isNaN(lat(d))) {
+            console.error('Invalid coordinate:', d);
+            return;
+          }
+          
+          // Project the geographic coordinates to pixel coordinates
+          // and include the original data
+          return {
+            point: this._project([lng(d), lat(d)]),
+            original: d,
+          };
+        }).filter(Boolean); // Remove undefined items, if any
+    
+        const metaData = this._metaData.map(m => {
+          return {
+            meta: m,
+          };
+        }) //.filter(Boolean); // Remove undefined items, if any
+    
+        //console.log('metaData:', metaData);
+    
+        // join the data and metaData arrays
+    
+        const joinedData = data.map((d, i) => {
+          return {
+            point: d.point,
+            original: d.original,
+            metaData: metaData[i].meta,
+          };
+        });
+        
+        //sort the joinedData array by score
+        //joinedData.sort((a, b) => (a.original.score > b.original.score) ? -1 : 1);
+    
+        // Debug: Log the original data
+        //console.log('Original Data:', this._data);
+    
+            const bounds = this._getBounds(data);
+    
+            // Update layout and container
+        const { min, max } = bounds;
+        const width = (max[0] - min[0]) + this.options.radius * 4;
+        const height = (max[1] - min[1]) + this.options.radius * 4;
+    
+            this._hexLayout.size([width, height]);
+            this._container.attr('width', width).attr('height', height)
+                .style('margin-left', `${min[0] - padding}px`)
+                .style('margin-top', `${min[1] - padding}px`);
+    
+            // Update SVG groups
+            const join = this._container.selectAll('g.hexbin').data([zoom]);
+            join.enter().append('g').attr('class', `hexbin zoom-${zoom}`);
+            join.attr('transform', `translate(${-min[0] + padding}, ${-min[1] + padding})`);
+            join.exit().remove();
+            
+            // Create or update hexagons
+            this._createHexagons(join, joinedData);
+        console.log('FN Redraw Complete');
+        }
+        </textarea>
+        <textarea class="code-box">
+          _createHexagons = (g, data) => {
+            console.log('FN Create Hexagons Entered');
+                const self = this; // Store a reference to the HexbinLayer instance
+                const bins = this._hexLayout(data).map(bin => {
+                    const totalScore = d3.sum(bin, d => d.original.score);
+                    const avgScore = bin.length ? totalScore / bin.length : 0;
+              const meta = bin.map(d => d.metaData);
+                    bin.score = avgScore;
+              bin.metaData = meta;
+                    return bin;
+              
+                });
+        
+            //console.log('Bins:', bins);
+          
+                const hexagons = g.selectAll('path.hexbin-hexagon')
+                    .data(bins, d => `${d.x}:${d.y}`);
+          
+                hexagons.transition().duration(200)
+                    .attr('fill', d => this._colorScale(d.score))
+                    .attr('stroke', 'black')
+                    .attr('stroke-width', '0.1');
+          
+                hexagons.enter().append('path')
+                    .attr('class', 'hexbin-hexagon')
+                    .attr('d', this._hexLayout.hexagon())
+                    .attr('transform', d => `translate(${d.x}, ${d.y})`)
+                    .attr('fill', d => this._colorScale(d.score))
+                    .attr('stroke', this.options.strokeColor)
+                    .attr('stroke-width', this.options.strokeWidth)
+                    .attr('opacity', this.options.opacity)
+              //.on("mouseover", d => this._trigger('hover', d))
+                    //.on("mouseout", d => this.options.onMouseOut(d))
+                    //.on("click", d => this._trigger('click', d));
+          
+                hexagons.exit().remove();
+        
+            // Initialize a Leaflet LayerGroup to hold markers
+            if (this._markerLayer) {
+              this._markerLayer.clearLayers();
+              console.log('Marker Layer Cleared');
+            } else {
+              this._markerLayer = L.layerGroup().addTo(this._map);
+              console.log('Marker Layer Added');
+            }
+          
+            // Loop through each bin to add a marker at its center
+            bins.forEach(bin => {
+                // Get the latitude and longitude of the hexagon's center
+              const latlngCenter = this._map.layerPointToLatLng(L.point(bin.x, bin.y));
+        
+              // Calculate the pixel position of the hexagon's bottom point
+              const bottomPointY = bin.y + this._hexLayout.radius() * Math.sqrt(3) / 2;
+        
+              // Get the latitude and longitude of the hexagon's bottom point
+              const latlngBottom = this._map.layerPointToLatLng(L.point(bin.x, bottomPointY));
+        
+              // Create an invisible Leaflet marker at the bottom of the hexagon
+              const marker = L.marker(latlngBottom, {
+                opacity: 0 // Make the marker invisible
+              });
+          
+              // Add a popup to the marker
+              marker.bindPopup(`<strong>Average Score:</strong> ${bin.score}<br><br>${this.processMetaData(bin.metaData)}`, {
+                autoPan: false
+              });
+        
+              // Add an event listener for when the popup is opened
+              marker.on("popupopen", function(event) {
+                // Find the leaflet-popup-content within the popup and style it
+                var popupContent = event.popup.getElement().querySelector('.leaflet-popup-content');
+                if (popupContent) {
+                  popupContent.style.maxHeight = '200px';
+                  popupContent.style.overflowY = 'auto';
+                }
+              });
+          
+              // Add hover event
+              marker.on('mouseover', () => {
+                if (this.options.onHover) {
+                  this.options.onHover(bin);
+                }
+              });
+          
+              // Add click event
+              marker.on('click', () => {
+                if (this.options.onClick) {
+                  this.options.onClick(bin);
+                }
+                this.highlightClickedHexagon(bin);
+              });
+          
+              // Add marker to the layer group
+              marker.addTo(this._markerLayer);
+              console.log('bind marker to layer group');
+            });
+        
+            }
+        </textarea>
+
+        <!-- Slide 9 with code box -->
+        <img class="slide" src="static/ProjectImages/Slide9.png" alt="Slide 9">
+        <textarea class="code-box">
+          async function fetchShopData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5500/places');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const shop_data = await response.json();
+        
+                shop_data.forEach(item => {
+                    item.places.score = 50;  // 50 is the initial value of the sliders
+                });
+        
+                shopDataArray = shop_data;
+                updateHexbinData(shopDataArray, hexLayershops);
+            } catch (error) {
+                console.error("Fetch error: ", error);
+            }
+        
+            
+        }
+        
+        // Function to fetch food data
+        async function fetchFoodData() {
+            try {
+                const response = await fetch('http://127.0.0.1:5500/restaurants');
+                if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                const food_data = await response.json();
+        
+                food_data.forEach(item => {
+                    item.restaurants.score = 50;  // 50 is the initial value of the sliders
+                });
+        
+                foodDataArray = food_data;
+                updateHexbinData(foodDataArray, hexLayerfood);
+            } catch (error) {
+                console.error("Fetch error: ", error);
+            }
+        }
+        
+        // Create the Hexbin Layer with some sample options
+        const hexLayershops = new L.HexbinLayer({
+            radius: 20,
+            colorRange: [
+                "#ff0000",
+                "#bf4000",
+                "#7f8000",
+                "#3fbf00",
+                "#00ff00",
+                "#00bf40",
+                "#008080",
+                "#0040bf",
+                "#0000ff"
+            ],
+            radiusRange: [1, 10],
+            opacity: 0.5,
+            strokeColor: '#000',
+            strokeWidth: 0.5,
+            //onMouseOver: d => console.log("Mouse over", `Score: ${d.score}`),
+            //onMouseOut: d => console.log("Mouse out", `Score: ${d.score}`),
+            //onClick: d => console.log("Clicked", `Score: ${d.score}`),
+            lng: d => d.lng,
+            lat: d => d.lat
+        })
+        
+        // Create the Hexbin Layer with some sample options
+        const hexLayerfood = new L.HexbinLayer({
+            radius: 20,
+            colorRange: [
+                "#ff0000",
+                "#bf4000",
+                "#7f8000",
+                "#3fbf00",
+                "#00ff00",
+                "#00bf40",
+                "#008080",
+                "#0040bf",
+                "#0000ff"
+            ],
+            radiusRange: [1, 10],
+            opacity: 0.5,
+            strokeColor: '#000',
+            strokeWidth: 0.5,
+            //onMouseOver: d => console.log("Mouse over", `Score: ${d.score}`),
+            //onMouseOut: d => console.log("Mouse out", `Score: ${d.score}`),
+            //onClick: d => console.log("Clicked", `Score: ${d.score}`),
+            lng: d => d.lng,
+            lat: d => d.lat
+           
+        })
+        </textarea>
+        <textarea class="code-box">
+          function populateCategories(categories, checkboxClass, checkboxContainer) {
+            // Remove any existing checkboxes first
+            const container = document.getElementById(checkboxContainer);
+            container.innerHTML = '';
+        
+            // Create a "Select All" button for each category
+            const selectAllButton = document.createElement('button');
+            selectAllButton.textContent = 'Select All';
+            selectAllButton.addEventListener('click', () => toggleAllCheckboxes());
+            container.appendChild(selectAllButton);
+            const br = document.createElement('br');
+            container.appendChild(br);
+         
+        
+            // Create new checkboxes based on categories
+            categories.forEach(category => {
+                // Create a checkbox element
+                const checkbox = document.createElement('input');
+                checkbox.type = 'checkbox';
+                checkbox.className = checkboxClass;
+                checkbox.dataset.category = category;
+                checkbox.checked = true;
+                checkbox.addEventListener('change', function () {
+                    if (checkboxClass.includes('shop')) {
+                        toggleSliders(checkboxClass, 'slider-box-shops', shopDataArray);
+                    } else {
+                        toggleSliders(checkboxClass, 'slider-box-food', foodDataArray);
+                    }
+                });
+        
+                
+        
+                // Create an img element for the category image
+                const img = document.createElement('img');
+                img.src = `/static/ProjectImages/CleanedImages/${category}_no_bg.png`; // Assuming the category name is the image name
+                img.alt = `${category} image`;
+                img.width = 30;
+                img.height = 30;
+        
+        
+                
+                // Create a label for the checkbox
+                const label = document.createElement('label');
+                //split by hyphen and capitalize each word
+                label.appendChild(document.createTextNode(' ' + category.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')));
+        
+                // Append checkbox and label to the container
+                container.appendChild(img);
+                container.appendChild(checkbox);
+                container.appendChild(label);
+        
+                // Add a break line for better readability
+                const br = document.createElement('br');
+                container.appendChild(br);
+            });
+        }
+        
+        // Function to populate sliders
+        function populateSliders(categories, sliderContainer, dataArray) {
+            // Fetch the container element by its ID
+            const container = document.getElementById(sliderContainer);
+            
+            // Clear out any existing content in the container
+            container.innerHTML = '';
+        
+            // Loop through each category
+            categories.forEach(category => {
+                // Create a sub-container for each category
+                const subContainer = document.createElement('div');
+                subContainer.className = 'slider-sub-container';
+        
+                // Create a new input element for the slider
+                const slider = document.createElement("input");
+                slider.type = "range";
+                slider.min = "0";
+                slider.max = "100";
+        
+                // Set the initial value of the slider based on dataArray
+                let initialScore = dataArray.find(item => {
+                    return Object.keys(item)[0] === "places" ? 
+                           item.places.cat_1 === category : 
+                           item.restaurants.cat_1 === category;
+                });
+        
+                // Set the initial value of the slider
+                initialScore = initialScore ? initialScore.places ? initialScore.places.score : initialScore.restaurants.score : 50;
+                slider.value = initialScore;
+                slider.className = "slider";
+                slider.dataset.category = category;
+        
+                // Create an img element to represent the category
+                const img = document.createElement('img');
+                img.src = `/static/ProjectImages/CleanedImages/${category}_no_bg.png`;
+                img.alt = `${category} image`;
+                img.width = 30;
+                img.height = 30;
+        
+                // Add event listener to update dataArray and map when the slider changes
+                slider.addEventListener('input', function () {
+                    updateDataArrayScore(category, this.value, dataArray);
+                    if (sliderContainer.includes('shop')) {
+                        updateHexbinData(dataArray, hexLayershops);
+                    }
+                    else {
+                        updateHexbinData(dataArray, hexLayerfood);
+                    }
+                });
+        
+                // Append the slider and image to the sub-container
+                subContainer.appendChild(img);
+                subContainer.appendChild(slider);
+        
+                // Append the sub-container to the main container
+                container.appendChild(subContainer);
+        
+                // Add a break line for better readability
+                const br = document.createElement('br');
+                container.appendChild(br);
+            });
+        
+            // Resize the slider box based on the number of sliders
+            //resizeSliderBox(sliderContainer);
+        }
+        </textarea>
+        <textarea class="code-box">
+          function updateHexbinData(dataArray, hexLayer) {
+            //console.log("Entered updateHexbinData"); // Debug
+            //console.log("Received data:", dataArray); // Debug
+        
+            // Filter out data points with score set to null
+            const filteredArray = dataArray.filter(item => {
+                const keys = Object.keys(item)[0];
+                return keys === "places" ? item.places.score !== null : item.restaurants.score !== null;
+            });
+        
+            const points = filteredArray.map(item => {
+                const keys = Object.keys(item)[0];
+                if (keys === "places") {
+                    return {
+                        lat: parseFloat(item.places.lat),
+                        lng: parseFloat(item.places.long),
+                        score: parseFloat(item.places.score)
+                    };
+                } else if (keys === "restaurants") {
+                    return {
+                        lat: parseFloat(item.restaurants.lat),
+                        lng: parseFloat(item.restaurants.long),
+                        score: parseFloat(item.restaurants.score)
+                    };
+                }
+            });
+            
+            // create a function that extracts name, cat_1, cat_2, and cat_3 from the data array
+            const metaData = filteredArray.map(item => {
+                const keys = Object.keys(item)[0];
+                let result = {};
+                
+                if (keys === "places") {
+                    let data = item[keys];
+                    
+                    // Bold the 'Name' and start div for indented categories
+                    result.name = `<strong>Name:</strong> ${data.name}<div style='margin-left: 20px;'>`;
+                    
+                    // Initialize an empty string to hold the categories
+                    let categories = '';
+                    
+                    // Conditionally include and bold categories if they are not null
+                    if (data.cat_1 !== null) {
+                        categories += `<strong>Category 1:</strong> ${data.cat_1} <br>`;
+                    }
+                    
+                    if (data.cat_2 !== null) {
+                        categories += `<strong>Category 2:</strong> ${data.cat_2} <br>`;
+                    }
+                    
+                    if (data.cat_3 !== null) {
+                        categories += `<strong>Category 3:</strong> ${data.cat_3}`;
+                    }
+                    
+                    // Add closing div for indented categories
+                    if (categories) {
+                        categories += '</div><br>';
+                    } else {
+                        // If there are no categories, close the div immediately
+                        result.name += '</div><br>';
+                    }
+                    
+                    // Combine name and categories
+                    result.categories = categories;
+                }
+                
+                if (keys === "restaurants") {
+                    let data = item[keys];
+                    
+                    // Bold the 'Name' and start div for indented categories
+                    result.name = `<strong>Name:</strong> ${data.name}<div style='margin-left: 20px;'>`;
+                    
+                    // Initialize an empty string to hold the categories
+                    let categories = '';
+                    
+                    // Conditionally include and bold categories if they are not null
+                    if (data.cat_1 !== null) {
+                        categories += `<strong>Category 1:</strong> ${data.cat_1} <br>`;
+                    }
+                    
+                    if (data.cat_2 !== null) {
+                        categories += `<strong>Category 2:</strong> ${data.cat_2} <br>`;
+                    }
+                    
+                    if (data.cat_3 !== null) {
+                        categories += `<strong>Category 3:</strong> ${data.cat_3}`;
+                    }
+                    
+                    // Add closing div for indented categories
+                    if (categories) {
+                        categories += '</div><br>';
+                    } else {
+                        // If there are no categories, close the div immediately
+                        result.name += '</div><br>';
+                    }
+                    
+                    // Combine name and categories
+                    result.categories = categories;
+                }
+                return result;
+            });
+        
+            
+        
+        
+            //console.log("Processed points:", points); // Debug
+            hexLayer.setData(points, metaData);
+            if (hexLayer === hexLayershops) {
+                hexLayer.addTo(map_shops);
+            } else if (hexLayer === hexLayerfood) {
+                hexLayer.addTo(map_food);
+            }
+        }
+        
+        
+        
+        async function initializeMaps() {
+            await fetchShopData();
+            await fetchFoodData();
+        
+            let shopcat_data = generateCategories(shopDataArray);
+            let foodcat_data = generateCategories(foodDataArray);
+            
+            console.log("Shop Data Categories: ", shopcat_data);
+            console.log("Food Data Categories: ", foodcat_data);
+        
+        
+        
+            populateCategories(shopcat_data, 'shop-checkbox', 'checkbox-box-shops');
+            populateCategories(foodcat_data, 'food-checkbox', 'checkbox-box-food');
+        
+            populateSliders(shopcat_data, 'slider-box-shops', shopDataArray);
+            populateSliders(foodcat_data, 'slider-box-food', foodDataArray);
+        
+            
+        
+            hexLayerfood.addTo(map_food);
+            hexLayershops.addTo(map_shops);
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            initializeMaps();
+        });
+        </textarea>
+    </div>
+</div>
 
   <!-- JavaScript to switch tabs -->
   <script>
