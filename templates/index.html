@@ -130,6 +130,25 @@
                 }})
             return jsonify(places_data)            
         </textarea>
+        <textarea class="code-box">
+          @app.route('/places_cat', methods=['GET'])
+def get_places_cat():
+    con = sqlite.connect('database/radar.db')
+    cursor = con.cursor()
+    cursor.execute("SELECT * FROM places_cat")
+    data = cursor.fetchall()
+    con.close()
+    places_cat_data = []
+    for p_cat_0, p_cat_1, p_cat_2, p_cat_3 in data:
+        places_cat_data.append({
+            'places_cat': {
+            'p_cat_0': p_cat_0,
+            'p_cat_1': p_cat_1,
+            'p_cat_2': p_cat_2,
+            'p_cat_3': p_cat_3
+        }})
+    return jsonify(places_cat_data)
+        </textarea>
 
 
         <!-- Slide 8 with code box -->
@@ -369,7 +388,7 @@
         </textarea>
 
         <!-- Slide 9 with code box -->
-        <img class="slide" src="static/ProjectImages/Slide9.png" alt="Slide 9">
+        <img class="slide" src="static/ProjectImages/NewSlide9.png" alt="Slide 9">
         <textarea class="code-box">
           async function fetchShopData() {
             try {
