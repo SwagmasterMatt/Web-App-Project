@@ -1,1 +1,1 @@
-web: source activate base && gunicorn app:app
+web: gunicorn wsgi:app
