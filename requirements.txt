@@ -6,8 +6,6 @@ bs4==0.0.1
 census==0.8.20
 citipy==0.0.6
 clyent==1.2.1
-conda-repo-cli==1.0.41
-conda-verify==3.4.2
 constantly==15.1.0
 cssselect==1.1.0
 daal4py==2023.0.2
