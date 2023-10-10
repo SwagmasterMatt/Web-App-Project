@@ -1,0 +1,1 @@
+web: source activate base && gunicorn app:app
